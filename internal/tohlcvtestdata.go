@@ -5,8 +5,8 @@
 package internal
 
 import (
-	"github.com/pplcc/plotext/custplotter"
-	"github.com/pplcc/plotext/examples"
+	"github.com/yasseldg/plotext/custplotter"
+	"github.com/yasseldg/plotext/examples"
 )
 
 func CreateTOHLCVTestData() custplotter.TOHLCVs {

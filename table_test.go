@@ -18,7 +18,7 @@ import (
 	"gonum.org/v1/plot/vg/draw"
 	"gonum.org/v1/plot/vg/vgimg"
 
-	"github.com/pplcc/plotext/internal"
+	"github.com/yasseldg/plotext/internal"
 )
 
 func TestAt(t *testing.T) {

@@ -9,7 +9,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/pplcc/plotext/custplotter"
+	"github.com/yasseldg/plotext/custplotter"
 )
 
 // CreateTOHLCVExampleData generates and returns some artificial TOHLCV data for testing and demo purpose

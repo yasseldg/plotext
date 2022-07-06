@@ -8,8 +8,8 @@ import (
 	"log"
 	"testing"
 
-	"github.com/pplcc/plotext/custplotter"
-	"github.com/pplcc/plotext/custplotter/internal"
+	"github.com/yasseldg/plotext/custplotter"
+	"github.com/yasseldg/plotext/custplotter/internal"
 	"gonum.org/v1/plot"
 )
 
