@@ -29,7 +29,7 @@ type Candlesticks struct {
 	ColorDown color.Color
 
 	// LineStyle is the style used to draw the sticks.
-	draw.LineStyle
+	LineStyle draw.LineStyle
 
 	// CandleWidth is the width of a candlestick
 	CandleWidth vg.Length
@@ -52,9 +52,9 @@ func NewCandlesticks(TOHLCV TOHLCVer) (*Candlesticks, error) {
 
 	return &Candlesticks{
 		TOHLCVs:        cpy,
-		FixedLineColor: true,
-		ColorUp:        color.RGBA{R: 128, G: 192, B: 128, A: 255}, // eye is more sensible to green
-		ColorDown:      color.RGBA{R: 255, G: 128, B: 128, A: 255},
+		FixedLineColor: false,
+		ColorUp:        color.RGBA{R: 0, G: 0, B: 0, A: 0}, //  green  {R: 128, G: 192, B: 128, A: 255}  eye is more sensible to
+		ColorDown:      color.RGBA{R: 0, G: 0, B: 0, A: 0}, //  red   {R: 255, G: 128, B: 128, A: 255}
 		LineStyle:      plotter.DefaultLineStyle,
 		CandleWidth:    vg.Length(DefaultCandleWidthFactor) * plotter.DefaultLineStyle.Width,
 	}, nil
@@ -65,17 +65,36 @@ func (sticks *Candlesticks) Plot(c draw.Canvas, plt *plot.Plot) {
 	trX, trY := plt.Transforms(&c)
 	lineStyle := sticks.LineStyle
 
+	sellColor := color.RGBA{R: 255, G: 128, B: 128, A: 255}
+	buyColor := color.RGBA{R: 128, G: 192, B: 128, A: 255}
+
 	for _, TOHLCV := range sticks.TOHLCVs {
 		var fillColor color.Color
-		if TOHLCV.C >= TOHLCV.O {
-			fillColor = sticks.ColorUp
-		} else {
-			fillColor = sticks.ColorDown
+
+		switch TOHLCV.R {
+		case 0.0: // Candles
+			if !sticks.FixedLineColor {
+				lineStyle.Color = fillColor
+			}
+			if TOHLCV.C >= TOHLCV.O {
+				fillColor = sticks.ColorUp
+			} else {
+				fillColor = sticks.ColorDown
+			}
+
+		case 1.1: // Def Sell
+			lineStyle.Color = sellColor
+		case 1.2:
+			lineStyle.Color = sellColor
+			fillColor = lineStyle.Color
+
+		case 2.1: // Def Buy
+			lineStyle.Color = buyColor
+		case 2.2:
+			lineStyle.Color = buyColor
+			fillColor = lineStyle.Color
 		}
 
-		if !sticks.FixedLineColor {
-			lineStyle.Color = fillColor
-		}
 		// Transform the data
 		// to the corresponding drawing coordinate.
 		x := trX(TOHLCV.T)
