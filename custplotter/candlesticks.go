@@ -65,8 +65,8 @@ func (sticks *Candlesticks) Plot(c draw.Canvas, plt *plot.Plot) {
 	trX, trY := plt.Transforms(&c)
 	lineStyle := sticks.LineStyle
 
-	sellColor := color.RGBA{R: 255, G: 128, B: 128, A: 255}
-	buyColor := color.RGBA{R: 128, G: 192, B: 128, A: 255}
+	sellColor := color.RGBA{R: 255, G: 0, B: 0, A: 255}
+	buyColor := color.RGBA{R: 0, G: 180, B: 0, A: 255}
 
 	for _, TOHLCV := range sticks.TOHLCVs {
 		var fillColor color.Color
@@ -82,15 +82,21 @@ func (sticks *Candlesticks) Plot(c draw.Canvas, plt *plot.Plot) {
 				fillColor = sticks.ColorDown
 			}
 
+		case 1.0: // Nearest Sell
+			lineStyle.Color = color.RGBA{R: 255, G: 190, B: 0, A: 255}
+			fillColor = lineStyle.Color
 		case 1.1: // Def Sell
 			lineStyle.Color = sellColor
-		case 1.2:
+		case 1.2: // Prov Sell
 			lineStyle.Color = sellColor
 			fillColor = lineStyle.Color
 
+		case 2.0: // Nearest Buy
+			lineStyle.Color = color.RGBA{R: 0, G: 255, B: 128, A: 255}
+			fillColor = lineStyle.Color
 		case 2.1: // Def Buy
 			lineStyle.Color = buyColor
-		case 2.2:
+		case 2.2: // Prov Buy
 			lineStyle.Color = buyColor
 			fillColor = lineStyle.Color
 		}
@@ -131,6 +137,10 @@ func (sticks *Candlesticks) DataRange() (xMin, xMax, yMin, yMax float64) {
 		yMin = math.Min(yMin, TOHLCV.L)
 		yMax = math.Max(yMax, TOHLCV.H)
 	}
+
+	yMin = yMin - yMin/100
+	yMax = yMax + yMax/100
+
 	return
 }
 
