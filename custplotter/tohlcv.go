@@ -15,8 +15,10 @@ type TOHLCVer interface {
 	TOHLCV(int) (float64, float64, float64, float64, float64, float64, float64)
 }
 
+type TOHLCVstruct struct{ T, O, H, L, C, V, R float64 }
+
 // TOHLCVs implements the TOHLCVer interface using a slice.
-type TOHLCVs []struct{ T, O, H, L, C, V, R float64 }
+type TOHLCVs []TOHLCVstruct
 
 // Len implements the Len method of the TOHLCVer interface.
 func (TOHLCV TOHLCVs) Len() int {
